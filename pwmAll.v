@@ -1,4 +1,4 @@
-module test_de2 (input CLOCK_50,output [17:0] LEDR,output [7:0] LEDG);
+module pwmAll (input CLOCK_50,output [17:0] LEDR,output [7:0] LEDG);
 reg [25:0] clk_div;
 reg [10:0] pwm_width;
 reg [10:0] pwm_cnt;

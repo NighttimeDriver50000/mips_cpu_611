@@ -1,4 +1,4 @@
-digraph DEPS {
+digraph dep_graph {
 
 rankdir = "LR"
 

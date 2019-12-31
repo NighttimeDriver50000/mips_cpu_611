@@ -1,4 +1,5 @@
 #!/bin/sh
+cd "$(dirname "$0")/.."
 echo 'DEPTH = 1024;' > program.mif
 echo 'WIDTH = 32;' >> program.mif
 echo 'ADDRESS_RADIX = UNS;' >> program.mif

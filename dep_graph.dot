@@ -2,40 +2,119 @@ digraph dep_graph {
 
 rankdir = "LR"
 
+subgraph top {
+    hex7seg
+    "lab6.do"
+    lab6_testbench
+}
+
 {
     alu_inst
-    alu_reg
-    alu_sim
+    LEDFullSettingManager
+    mips_cpu_inst
+    mips_cpu_inst_for_sim
+    reg32x32_inst
+} -> hex7seg [
+    constraint = false
+    color = lightgray
+]
+
+{
+    "lab6.do"
+} -> lab6_testbench
+
+/**************************************/
+
+subgraph tmp {
+    "data_hex.txt"
+    "program_hex.txt"
+    "program.mif"
+}
+
+{
+    rank = same
+    "data_hex.txt"
+    "program_hex.txt"
+}
+
+{
+    rank = same
+    "program.mif"
+    hex7seg
+}
+
+{
+    mips_cpu_inst
+    mips_cpu_inst_for_sim
+} -> "data_hex.txt" [
+    color = red
+]
+
+{
+    "gen_mif.sh"
+    inst_mem_alt_test_bb
+    mips_cpu_inst
+    mips_cpu_inst_for_sim
+    "padprogram.sh"
+} -> "program_hex.txt" [
+    color = blue
+]
+
+{
+    inst_mem_alt_test
+} -> "program.mif"
+
+/**************************************/
+
+subgraph cluster_tool {
+    label = "tool"
+    "gen_mif.sh"
+    "padprogram.sh"
+    "prep_orbit.sh"
+}
+
+{
+    "prep_orbit.sh"
+    "program.mif"
+} -> "gen_mif.sh"
+
+{
+    "prep_orbit.sh"
+} -> "padprogram.sh"
+
+{
+    "data_hex.txt"
+    "program_hex.txt"
+} -> "prep_orbit.sh"
+
+/**************************************/
+
+subgraph cluster_asm {
+    label = "asm"
+    "avg2dec7seg.asm"
+    "l7p21.asm"
+    "l9p16mod.asm"
+    "orbit.asm"
+    "sqrt.asm"
+    "sw2dec7seg.asm"
+}
+
+{
+    "prep_orbit.sh"
+} -> "orbit.asm"
+
+/**************************************/
+
+subgraph cluster_cpu {
+    label = "cpu"
+    CPU
+    inst_mem_alt_test
+    inst_mem_alt_test_bb
     mips_cpu
-} -> alu
-
-alu_inst
-
-{
-    alu_inst
-} -> "alu_inst.tv"
-
-{
-    alu_inst
-} -> alu_reg
-
-alu_sim
-
-{
-    alu_sim
-} -> "alu_sim.tv"
-
-"avg2dec7seg.asm"
-
-BinaryCounter
-
-{
-    "exam.do"
-} -> bitcounter
-
-{
-    testbench
-} -> clk_generator
+    mips_cpu_inst
+    mips_cpu_inst_for_sim
+    mips_cpu_sim
+}
 
 {
     lab6_testbench
@@ -43,52 +122,7 @@ BinaryCounter
 
 {
     mips_cpu_inst
-    mips_cpu_inst_for_sim
-} -> "data_hex.txt"
-
-{
-    mips_cpu_inst
-    video_test
-} -> display_if
-
-{
-    display_if
-} -> Display
-
-"exam.do"
-
-{
-    "prep_orbit.sh"
-    "program.mif"
-} -> "gen_mif.sh"
-
-/*{
-    alu_inst
-    LEDFullSettingManager
-    mips_cpu_inst
-    mips_cpu_inst_for_sim
-    reg32x32_inst
-} -> hex7seg*/
-
-{
-    mips_cpu_inst
 } -> inst_mem_alt_test
-
-inst_mem_alt_test_bb
-
-"l7p21.asm"
-
-"l9p16mod.asm"
-
-"lab6.do"
-
-{
-    "lab6.do"
-} -> lab6_testbench
-
-{
-    test_de2
-} -> LEDFullSettingManager
 
 {
     mips_cpu_inst
@@ -103,101 +137,10 @@ inst_mem_alt_test_bb
     mips_cpu_sim
 } -> mips_cpu_inst_for_sim
 
-mips_cpu_sim
+/**************************************/
 
-{
-    "prep_orbit.sh"
-} -> "orbit.asm"
-
-{
-    "prep_orbit.sh"
-} -> "padprogram.sh"
-
-{
-    "program_hex.txt"
-} -> "prep_orbit.sh"
-
-{
-    "gen_mif.sh"
-    inst_mem_alt_test_bb
-    mips_cpu_inst
-    mips_cpu_inst_for_sim
-    "padprogram.sh"
-} -> "program_hex.txt"
-
-{
-    inst_mem_alt_test
-} -> "program.mif"
-
-pwmAll
-
-pwm
-
-{
-    mips_cpu
-    reg32x32_exactspec
-    reg32x32_inst
-    reg32x32_sim
-} -> reg32x32
-
-reg32x32_exactspec
-
-reg32x32_inst
-
-reg32x32_sim
-
-{
-    alu_reg
-} -> regn
-
-Shifter
-
-{
-    test_de2
-} -> SinglePwm
-
-"sqrt.asm"
-
-"sw2dec7seg.asm"
-
-testbench
-
-{
-    "test_de2.do"
-} -> test_de2
-
-"test_de2.do"
-
-{
-    display_if
-} -> VGA_PLL
-
-{
-    display_if
-} -> VGA_Sync
-
-video_test
-
-{
-    Display
-} -> vmem8192x24
-
-subgraph clusterIndependent {
-    BinaryCounter
-    bitcounter
-    clk_generator
-    "exam.do"
-    LEDFullSettingManager
-    pwm
-    pwmAll
-    Shifter
-    SinglePwm
-    test_de2
-    "test_de2.do"
-    testbench
-}
-
-subgraph clusterAlu {
+subgraph cluster_alu {
+    label = "alu"
     alu
     alu_inst
     "alu_inst.tv"
@@ -207,14 +150,55 @@ subgraph clusterAlu {
     regn
 }
 
-subgraph clusterReg32 {
+{
+    alu_inst
+    alu_reg
+    alu_sim
+    mips_cpu
+} -> alu
+
+{
+    alu_inst
+} -> "alu_inst.tv"
+
+{
+    alu_inst
+} -> alu_reg
+
+{
+    alu_sim
+} -> "alu_sim.tv"
+
+{
+    alu_reg
+} -> regn
+
+/**************************************/
+
+subgraph cluster_reg {
+    label = "reg"
     reg32x32
     reg32x32_exactspec
     reg32x32_inst
     reg32x32_sim
+    "reg32x32_sim.tv"
 }
 
-subgraph clusterVideo {
+{
+    mips_cpu
+    reg32x32_exactspec
+    reg32x32_inst
+    reg32x32_sim
+} -> reg32x32
+
+{
+    reg32x32_sim
+} -> "reg32x32_sim.tv"
+
+/**************************************/
+
+subgraph cluster_vga {
+    label = "vga"
     Display
     display_if
     VGA_PLL
@@ -223,32 +207,63 @@ subgraph clusterVideo {
     vmem8192x24
 }
 
-subgraph clusterCpu {
-    CPU
-    "data_hex.txt"
-    mips_cpu
+{
+    display_if
+} -> Display
+
+{
     mips_cpu_inst
-    mips_cpu_inst_for_sim
-    mips_cpu_sim
+    video_test
+} -> display_if
+
+{
+    display_if
+} -> VGA_PLL
+
+{
+    display_if
+} -> VGA_Sync
+
+{
+    Display
+} -> vmem8192x24
+
+/**************************************/
+
+subgraph cluster_misc {
+    label = "misc"
+    BinaryCounter
+    bitcounter
+    clk_generator
+    "exam.do"
+    LEDFullSettingManager
+    pwm
+    pwmAll
+    Shifter
+    SinglePwm
+    testbench
+    test_de2
+    "test_de2.do"
 }
 
-subgraph clusterInstMem {
-    "gen_mif.sh"
-    inst_mem_alt_test
-    inst_mem_alt_test_bb
-    "padprogram.sh"
-    "prep_orbit.sh"
-    "program.mif"
-    "program_hex.txt"
-}
+{
+    "exam.do"
+} -> bitcounter
 
-subgraph clusterAsm {
-    "avg2dec7seg.asm"
-    "l7p21.asm"
-    "l9p16mod.asm"
-    "orbit.asm"
-    "sqrt.asm"
-    "sw2dec7seg.asm"
-}
+{
+    testbench
+} -> clk_generator
+
+{
+    test_de2
+} -> LEDFullSettingManager
+
+{
+    test_de2
+} -> SinglePwm
+
+{
+    "test_de2.do"
+} -> test_de2
 
 }

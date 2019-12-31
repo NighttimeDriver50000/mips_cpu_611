@@ -1,0 +1,31 @@
+// RA1_RA2_WA_WE_WD_30IN_RD1_RD2_30OUT
+// Write-then-read, read port 1
+xx_xx_01_1_0f0f0f0f_xxxxxxxx_xxxxxxxx_xxxxxxxx_xxxxxxxx // 0
+01_xx_xx_0_xxxxxxxx_xxxxxxxx_0f0f0f0f_xxxxxxxx_xxxxxxxx // 1
+// Write-then-read, read port 2
+xx_xx_0a_1_f0f0f0f0_xxxxxxxx_xxxxxxxx_xxxxxxxx_xxxxxxxx // 2
+xx_0a_xx_0_xxxxxxxx_xxxxxxxx_xxxxxxxx_f0f0f0f0_xxxxxxxx // 3
+// Read on both ports while writing to a different port
+0a_01_1f_1_fffffff2_xxxxxxxx_f0f0f0f0_0f0f0f0f_xxxxxxxx // 4
+// Read on one port while writing to a different port
+1f_xx_1d_1_00ff00ff_xxxxxxxx_fffffff2_xxxxxxxx_xxxxxxxx // 5
+// Read on both ports
+01_1d_xx_0_xxxxxxxx_xxxxxxxx_0f0f0f0f_00ff00ff_xxxxxxxx // 6
+// Write register 30 (note: reg30_out is synchronous)
+xx_xx_1e_1_ff00ff00_xxxxxxxx_xxxxxxxx_xxxxxxxx_xxxxxxxx // 7
+// Read register 30
+1e_xx_xx_0_xxxxxxxx_0000ffff_0000ffff_xxxxxxxx_ff00ff00 // 8
+// Write-then-read, register 0
+00_xx_00_1_ffff0000_xxxxxxxx_00000000_xxxxxxxx_ff00ff00 // 9
+xx_00_xx_0_xxxxxxxx_xxxxxxxx_xxxxxxxx_00000000_ff00ff00 // 10
+// Write-and-read, read port 1
+0a_1d_0a_1_0f0f7777_xxxxxxxx_0f0f7777_00ff00ff_ff00ff00 // 11
+// Write-and-read, read port 2
+1f_01_01_1_eeeef0f0_xxxxxxxx_fffffff2_eeeef0f0_ff00ff00 // 12
+// No write enable
+01_xx_01_0_f00fdddd_xxxxxxxx_eeeef0f0_xxxxxxxx_ff00ff00 // 13
+xx_01_xx_0_xxxxxxxx_xxxxxxxx_xxxxxxxx_eeeef0f0_ff00ff00 // 14
+// Further register 30 testing
+xx_1e_1e_1_0ff0cccc_d00dbaba_xxxxxxxx_d00dbaba_ff00ff00 // 15
+xx_1e_1e_0_e00e8989_87654321_xxxxxxxx_87654321_0ff0cccc // 16
+xx_xx_xx_0_xxxxxxxx_xxxxxxxx_xxxxxxxx_xxxxxxxx_0ff0cccc // 17

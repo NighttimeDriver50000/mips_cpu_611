@@ -1,2 +1,5 @@
 *.swp
 *.pdf
+*.mif
+/data_hex.txt
+/program_hex.txt

@@ -3,3 +3,4 @@
 *.mif
 /data_hex.txt
 /program_hex.txt
+/obj_dir

@@ -5,7 +5,7 @@ module hex7seg(
 		input [3:0] value,
 		output reg [6:0] segs);
 
-always @(posedge clk or posedge reset) begin
+always @(posedge clk) begin
 	if (reset) segs <= 7'b0111111;
 	else begin
 		case (value)

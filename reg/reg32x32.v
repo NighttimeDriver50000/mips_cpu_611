@@ -17,26 +17,26 @@ module reg32x32 (
  * time without using a readaddr input, and the hardware memories on the
  * Cyclone IV have only two read ports.
  */
-reg [31:0] registers [29:0];
+reg [31:0] registers [29:0] /*verilator public*/;
 
 // Asynchronous read port 1
 always @(*) begin
-	if (readaddr1 == 5'd0) readdata1 <= 32'h0;
-	else if (readaddr1 == 5'd30) readdata1 <= reg30_in;
+	if (readaddr1 == 5'd0) readdata1 = 32'h0;
+	else if (readaddr1 == 5'd30) readdata1 = reg30_in;
 	// Bypassed write
-	else if (we && readaddr1 == writeaddr) readdata1 <= writedata;
-	else if (readaddr1 == 5'd31) readdata1 <= registers[0];
-	else readdata1 <= registers[readaddr1];
+	else if (we && readaddr1 == writeaddr) readdata1 = writedata;
+	else if (readaddr1 == 5'd31) readdata1 = registers[0];
+	else readdata1 = registers[readaddr1];
 end
 
 // Asynchronous read port 2
 always @(*) begin
-	if (readaddr2 == 5'd0) readdata2 <= 32'h0;
-	else if (readaddr2 == 5'd30) readdata2 <= reg30_in;
+	if (readaddr2 == 5'd0) readdata2 = 32'h0;
+	else if (readaddr2 == 5'd30) readdata2 = reg30_in;
 	// Bypassed write
-	else if (we && readaddr2 == writeaddr) readdata2 <= writedata;
-	else if (readaddr2 == 5'd31) readdata2 <= registers[0];
-	else readdata2 <= registers[readaddr2];
+	else if (we && readaddr2 == writeaddr) readdata2 = writedata;
+	else if (readaddr2 == 5'd31) readdata2 = registers[0];
+	else readdata2 = registers[readaddr2];
 end
 
 // Synchronous write port

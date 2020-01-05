@@ -43,11 +43,11 @@ end
 wire [5:0] op, funct;
 wire [4:0] rs, rt, rd, shamt;
 wire [15:0] imm;
-wire [25:0] addr;
+wire [9:0] addr;
 
 assign {op,rs,rt,rd,shamt,funct} = inst_exec;
 assign imm = inst_exec[15:0];
-assign addr = inst_exec[25:0];
+assign addr = inst_exec[9:0];
 
 // ==[ Execute ]===============================================================
 
@@ -155,11 +155,11 @@ always @(*) begin
 		jump_target = addr;
 	end else if (op == 6'h00 && funct == 6'h08) begin // jr
 		do_jump = 1'b1;
-		jump_target = regs_readdata1;
+		jump_target = regs_readdata1[9:0];
 	end else if (((op == 6'h04 || op == 6'h01) && alu_zero == 1'b1) // beq/bgez
 			|| (op == 6'h05 && alu_zero == 1'b0)) begin // bne
 		do_jump = 1'b1;
-		jump_target = inst_addr + imm;
+		jump_target = inst_addr + imm[9:0];
 	end else begin
 		do_jump = 1'b0;
 		jump_target = 10'h0;
@@ -168,7 +168,7 @@ end
 
 // ==[ Memory ] ===============================================================
 
-assign data_addr = alu_lo;
+assign data_addr = alu_lo[15:0];
 assign data_out = regs_readdata2;
 assign data_we = (op == 6'h2b) ? 1'b1 : 1'b0; // Only write on sw.
 
@@ -225,7 +225,7 @@ always @(*) begin
 	
 		next_we = 1'b1;
 		next_writeaddr = 5'd31;
-		next_writedata = inst_addr;
+		next_writedata = {22'h0,inst_addr};
 		
 	end
 end

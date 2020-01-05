@@ -4,7 +4,9 @@ module alu (input [31:0] a,b,
 		output reg [31:0] hi,lo,
 		output zero);
 
+/* verilator lint_off UNUSED */
 wire [32:0] diff = {1'b0,a}+{1'b0,~b+32'b1};
+/* verilator lint_on UNUSED */
 
 assign zero = lo==32'd0 ? 1'b1 : 1'b0;
 
@@ -38,7 +40,7 @@ always @(*) begin
 				lo = 32'b1;
 			else lo = 32'b0;
 			
-		4'b11_??:
+		4'b11_01, 4'b11_1?:
 		if (~diff[32]) lo = 32'b1; // sltu
 		else lo = 32'b0;
 

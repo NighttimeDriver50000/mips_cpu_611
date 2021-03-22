@@ -5,7 +5,7 @@ module display_if_sdl (
 	input mem_web);
 
 import "DPI-C" function void
-    sdl_write(input integer y, input integer x, input integer r, input integer g, input integer b);
+    sdl_write(input int y, input int x, input int r, input int g, input int b);
 
 always @(posedge clk) begin
     if (mem_web) begin

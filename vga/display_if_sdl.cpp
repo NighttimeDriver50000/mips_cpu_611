@@ -11,7 +11,7 @@ SDL_Window* window;
 SDL_Renderer* renderer;
 int pixel_size = 4;
 
-void sdl_write(int y, int x, int r, int g, int b) {
+extern "C" void sdl_write(int y, int x, int r, int g, int b) {
     SDL_Rect rect;
     rect.y = pixel_size * y;
     rect.x = pixel_size * x;
